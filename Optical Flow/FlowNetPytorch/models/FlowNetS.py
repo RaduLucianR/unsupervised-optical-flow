@@ -113,6 +113,9 @@ def flownets_bn(data=None):
         data : pretrained weights of the network. will create a new one if not set
     """
     model = FlowNetS(batchNorm=True)
+    model.load_state_dict(torch.load("pretrained\flownets_bn_EPE2.459.pth.tar"))
+
+
     if data is not None:
         model.load_state_dict(data['state_dict'])
     return model
