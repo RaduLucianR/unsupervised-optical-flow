@@ -36,6 +36,8 @@ def multiscaleEPE(network_output, target_flow, weights=None, sparse=False):
 
         b, _, h, w = output.size()
 
+        print(f"output size: {b,_,h,w}")
+
         if sparse:
             target_scaled = sparse_max_pool(target, (h, w))
         else:
@@ -46,7 +48,7 @@ def multiscaleEPE(network_output, target_flow, weights=None, sparse=False):
         network_output = [network_output]
     if weights is None:
         weights = [0.005, 0.01, 0.02, 0.08, 0.32]  # as in original article
-    assert(len(weights) == len(network_output))
+    # assert(len(weights) == len(network_output))
 
     loss = 0
     for output, weight in zip(network_output, weights):
@@ -56,5 +58,6 @@ def multiscaleEPE(network_output, target_flow, weights=None, sparse=False):
 
 def realEPE(output, target, sparse=False):
     b, _, h, w = target.size()
+    print(f"target size: {b,_,h,w}")
     upsampled_output = F.interpolate(output, (h,w), mode='bilinear', align_corners=False)
     return EPE(upsampled_output, target, sparse, mean=True)

@@ -86,7 +86,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def main():
     global args, best_EPE
+
     args = parser.parse_args()
+
     save_path = '{},{},{}epochs{},b{},lr{}'.format(
         args.arch,
         args.solver,
@@ -97,6 +99,7 @@ def main():
     if not args.no_date:
         timestamp = datetime.datetime.now().strftime("%m-%d-%H:%M")
         save_path = os.path.join(timestamp,save_path)
+    
     save_path = os.path.join(args.dataset,save_path)
     print('=> will save everything to {}'.format(save_path))
     if not os.path.exists(save_path):
@@ -120,6 +123,7 @@ def main():
     ])
 
     if 'KITTI' in args.dataset:
+        print("using kitti dataset")
         args.sparse = True
     if args.sparse:
         co_transform = flow_transforms.Compose([
@@ -188,8 +192,7 @@ def main():
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=args.milestones, gamma=0.5)
 
     for epoch in range(args.start_epoch, args.epochs):
-        scheduler.step()
-
+        
         # train for one epoch
         train_loss, train_EPE = train(train_loader, model, optimizer, epoch, train_writer)
         train_writer.add_scalar('mean EPE', train_EPE, epoch)
@@ -212,6 +215,8 @@ def main():
             'best_EPE': best_EPE,
             'div_flow': args.div_flow
         }, is_best, save_path)
+        scheduler.step()
+
 
 
 def train(train_loader, model, optimizer, epoch, train_writer):
@@ -235,12 +240,13 @@ def train(train_loader, model, optimizer, epoch, train_writer):
         input = torch.cat(input,1).to(device)
 
         # compute output
-        output = model(input)
+        output = model(input)        
+
         if args.sparse:
             # Since Target pooling is not very precise when sparse,
             # take the highest resolution prediction and upsample it instead of downsampling target
             h, w = target.size()[-2:]
-            output = [F.interpolate(output[0], (h,w)), *output[1:]]
+            output = [F.interpolate(output, (h,w))]
 
         loss = multiscaleEPE(output, target, weights=args.multiscale_weights, sparse=args.sparse)
         flow2_EPE = args.div_flow * realEPE(output[0], target, sparse=args.sparse)

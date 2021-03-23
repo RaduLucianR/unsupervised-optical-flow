@@ -4,3 +4,7 @@ jake/dataset/
 Optical Flow/pretrained/
 
 datasets/
+
+Optical Flow/FlowNetPytorch/data_scene_flow/
+
+Optical Flow/FlowNetPytorch/KITTI_noc/
