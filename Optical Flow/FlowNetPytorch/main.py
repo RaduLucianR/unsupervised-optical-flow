@@ -2,6 +2,9 @@ import argparse
 import os
 import time
 
+import numpy as np
+import cv2
+
 import torch
 import torch.nn.functional as F
 import torch.nn.parallel
@@ -217,7 +220,37 @@ def main():
         }, is_best, save_path)
         scheduler.step()
 
+def cv_target(input):
+    # convert tensor to ndarrray
+    inputs = [0]*2
+    inputs[0] = input[0].numpy()
+    inputs[1] = input[1].numpy()
+    batch_size = input[0].shape[0]
+    width = inputs[0].shape[3]
+    height = inputs[0].shape[2]
+    target = torch.zeros((batch_size, 2, height, width))
 
+    
+    for i in range(batch_size):
+        # get the first and second frame and put them in the correct format
+        prvs = inputs[0][i].transpose(1,2,0)
+        next = inputs[1][i].transpose(1,2,0)
+
+        # rgb to grayscale
+        prvs = cv2.cvtColor(prvs,cv2.COLOR_BGR2GRAY)
+        next = cv2.cvtColor(next,cv2.COLOR_BGR2GRAY)
+
+        flow = cv2.calcOpticalFlowFarneback(prvs, next, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+
+        # format back to torch
+        flow = flow.transpose(2,0,1)
+
+        target[i] = torch.from_numpy(flow)
+        
+    return target
+
+    
+    
 
 def train(train_loader, model, optimizer, epoch, train_writer):
     global n_iter, args
@@ -236,6 +269,11 @@ def train(train_loader, model, optimizer, epoch, train_writer):
     for i, (input, target) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
+
+        target = cv_target(input)
+
+        # breakpoint()
+
         target = target.to(device)
         input = torch.cat(input,1).to(device)
 
