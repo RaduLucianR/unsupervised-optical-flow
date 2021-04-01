@@ -270,11 +270,11 @@ def train(train_loader, model, optimizer, epoch, train_writer):
         # measure data loading time
         data_time.update(time.time() - end)
 
-        target = cv_target(input)
+        target_cv = cv_target(input)
 
         # breakpoint()
 
-        target = target.to(device)
+        target_cv = target_cv.to(device)
         input = torch.cat(input,1).to(device)
 
         # compute output
@@ -283,7 +283,7 @@ def train(train_loader, model, optimizer, epoch, train_writer):
         if args.sparse:
             # Since Target pooling is not very precise when sparse,
             # take the highest resolution prediction and upsample it instead of downsampling target
-            h, w = target.size()[-2:]
+            h, w = target_cv.size()[-2:]
             output = [F.interpolate(output, (h,w))]
 
         loss = multiscaleEPE(output, target, weights=args.multiscale_weights, sparse=args.sparse)
