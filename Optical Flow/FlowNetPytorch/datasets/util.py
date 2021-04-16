@@ -18,7 +18,7 @@ def split2list(images, split, default_split=0.9):
             raise
         # split_values = np.random.uniform(0,1,len(images)) < split
         L = len(images)
-        split_values = [1]*round(split*L) + [0]*round((1-split)*L)
+        split_values = np.flip([1]*round(split*L) + [0]*round((1-split)*L))
     train_samples = [sample for sample, split in zip(images, split_values) if split]
     test_samples = [sample for sample, split in zip(images, split_values) if not split]
     return train_samples, test_samples

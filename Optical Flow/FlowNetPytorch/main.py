@@ -94,8 +94,6 @@ def main():
     global args, best_EPE
 
     
-
-
     args = parser.parse_args()
 
     save_path = '{},{},{}epochs{},b{},lr{}'.format(
