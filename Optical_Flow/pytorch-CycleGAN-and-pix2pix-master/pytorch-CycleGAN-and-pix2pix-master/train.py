@@ -24,6 +24,11 @@ from data import create_dataset
 from models import create_model
 from util.visualizer import Visualizer
 
+from torch.utils.tensorboard import SummaryWriter  # to print to tensorboard
+from torchvision.utils import save_image
+
+
+
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
     dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
@@ -35,6 +40,11 @@ if __name__ == '__main__':
     model.setup(opt)               # regular setup: load and print networks; create schedulers
     visualizer = Visualizer(opt)   # create a visualizer that display/save images and plots
     total_iters = 0                # the total number of training iterations
+
+    writer_fake = SummaryWriter(f"logs/fake")
+    writer_real = SummaryWriter(f"logs/real")
+    step = 0
+
 
     for epoch in range(opt.epoch_count, opt.n_epochs + opt.n_epochs_decay + 1):    # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
         epoch_start_time = time.time()  # timer for entire epoch
@@ -51,18 +61,13 @@ if __name__ == '__main__':
             epoch_iter += opt.batch_size
             model.set_input(data)         # unpack data from dataset and apply preprocessing
             model.optimize_parameters()   # calculate loss functions, get gradients, update network weights
+            # model.fake_B = G(data)
 
-            if total_iters % opt.display_freq == 0:   # display images on visdom and save images to a HTML file
-                save_result = total_iters % opt.update_html_freq == 0
-                model.compute_visuals()
-                visualizer.display_current_results(model.get_current_visuals(), epoch, save_result)
 
             if total_iters % opt.print_freq == 0:    # print training losses and save logging information to the disk
                 losses = model.get_current_losses()
                 t_comp = (time.time() - iter_start_time) / opt.batch_size
                 visualizer.print_current_losses(epoch, epoch_iter, losses, t_comp, t_data)
-                if opt.display_id > 0:
-                    visualizer.plot_current_losses(epoch, float(epoch_iter) / dataset_size, losses)
 
             if total_iters % opt.save_latest_freq == 0:   # cache our latest model every <save_latest_freq> iterations
                 print('saving the latest model (epoch %d, total_iters %d)' % (epoch, total_iters))
@@ -70,9 +75,36 @@ if __name__ == '__main__':
                 model.save_networks(save_suffix)
 
             iter_data_time = time.time()
+            if i % 25 == 0:
+                save_image(model.fake_B[0], r'fake_images/'+str(epoch)+'_'+str(i)+'.png')
+
         if epoch % opt.save_epoch_freq == 0:              # cache our model every <save_epoch_freq> epochs
             print('saving the model at the end of epoch %d, iters %d' % (epoch, total_iters))
             model.save_networks('latest')
             model.save_networks(epoch)
+
+        # tensorboard
+        
+        # if i == 0:
+        #     print(
+        #         f"Epoch [{epoch}/{opt.n_epochs + opt.n_epochs_decaypochs}] Batch {i}/{len(dataset)} \
+        #               D_fake: {losses['D_fake']:.4f}, G_L1: {losses['G_L1']:.4f}, G_GAN: {losses['G_GAN']:.4f} \
+        #               D_real: {losses['D_real']:.4f}  " 
+        #     )
+
+        #     with torch.no_grad():
+        #         # fake = gen(fixed_noise).reshape(-1, 1, 28, 28)
+        #         # data = real.reshape(-1, 1, 28, 28)
+        #         img_grid_fake = torchvision.utils.make_grid(model.fake_B, normalize=True)
+        #         # img_grid_real = torchvision.utils.make_grid(data, normalize=True)
+
+        #         writer_fake.add_image(
+        #             "Mnist Fake Images", img_grid_fake, global_step=step
+        #         )
+        #         writer_fake.add_scalar('Loss/train', np.random.random(), step)
+        #         # writer_real.add_image(
+        #         #     "Mnist Real Images", img_grid_real, global_step=step
+        #         # )
+        #         step += 1
 
         print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch, opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))

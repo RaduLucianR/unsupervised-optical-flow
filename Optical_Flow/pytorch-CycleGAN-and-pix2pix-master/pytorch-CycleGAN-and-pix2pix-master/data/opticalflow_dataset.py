@@ -86,7 +86,7 @@ class OpticalflowDataset(BaseDataset):
         #concatenation
         #breakpoint()
         A = torch.cat((A,flow), 0)
-        print(A.size())
+        # print(A.size())
         #breakpoint()
 
         return {'A': A, 'B': B, 'A_paths': A_path, 'B_paths': B_path}
