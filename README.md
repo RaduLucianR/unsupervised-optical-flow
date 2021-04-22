@@ -29,8 +29,7 @@ include global planning
 
 ### supervised
 
-Inline-style: 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+❮img src="repo_images/supervised_learning_architecture.png" width="100" ❯
 
 
 ### unsupervised aproach 1: with opencv
