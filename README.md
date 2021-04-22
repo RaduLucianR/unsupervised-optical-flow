@@ -29,10 +29,13 @@ include global planning
 
 ### supervised
 
-❮img src="repo_images/supervised_learning_architecture.png" width="100" ❯
+
+<img src="repo_images/supervised_learning_architecture.png" width="600" >
 
 
 ### unsupervised aproach 1: with opencv
+
+<img src="repo_images/computer_vision_architecture.png" width="600" >
 
 ### unsupervised apraoch 2: with GANs
 
