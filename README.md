@@ -21,8 +21,15 @@ how we got familiar with the fudamentals of DL
 
 image class
 
-semantic class 
-[I'm an inline-style link](https://www.google.com)
+[VGG: Very Deep Convolutional Networks for Large-Scale Image Recognition](https://arxiv.org/abs/1409.1556)
+
+[ResNet: Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385)
+
+semantic seg
+
+[DeepLabV2: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs](https://arxiv.org/abs/1706.05587)
+
+[FCN: Fully Convolutional Networks for Semantic Segmentation](https://arxiv.org/abs/1411.4038)
 
 include global planning
 
