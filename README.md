@@ -16,16 +16,20 @@ why want it?
 
 initial knowledge on DL
 
-how we got familiar with AI
+how we got familiar with the fudamentals of DL
+[CS231n: Convolutional Neural Networks for Visual Recognition](https://www.youtube.com/watch?v=vT1JzLTH4G4&list=PL3FW7Lu3i5JvHM8ljYj-zLfQRF3EO8sYv)
 
 image class
 
-semantic class
+semantic class 
+[I'm an inline-style link](https://www.google.com)
 
 include global planning
 
 
 # Methods
+
+[FlowNet](https://arxiv.org/abs/1504.06852)
 
 ## Supervised Optical Flow
 
@@ -57,7 +61,9 @@ text
 
 text
 
-## unsupervised apraoch 2: with GANs
+## unsupervised Aproach 2: with a GAN
+
+[Pix2Pix](https://arxiv.org/abs/1611.07004)
 
 text
 
@@ -93,3 +99,11 @@ text
 text
 
 text
+
+## Acknowledgemnets
+
+(repos where we got most of our code)
+
+
+
+
