@@ -30,15 +30,18 @@ include global planning
 ### Supervised Optical Flow
 
 
-<img src="repo_images/supervised_learning_architecture.png" width="600" >
+<img src="repo_images/supervised.png" width="600" >
 
 
-### Unsupervised Aproach 1:
-> using opencv
+### Unsupervised Aproach 1: with classical computer vision
 
-<img src="repo_images/computer_vision_architecture.png" width="600" >
+<img src="repo_images/cv.png" width="600" >
 
 ### unsupervised apraoch 2: with GANs
+
+<img src="repo_images/stage1.png" width="600" >
+
+<img src="repo_images/stage2.png" width="600" >
 
 ## Results
 
