@@ -27,13 +27,14 @@ include global planning
 
 ## Methods
 
-### supervised
+### Supervised Optical Flow
 
 
 <img src="repo_images/supervised_learning_architecture.png" width="600" >
 
 
-### unsupervised aproach 1: with opencv
+### Unsupervised Aproach 1:
+> using opencv
 
 <img src="repo_images/computer_vision_architecture.png" width="600" >
 
