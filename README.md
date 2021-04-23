@@ -58,6 +58,9 @@ text
 
 text
 
+[Dense Optical Flow (Gunnar-Farneback)](https://github.com/opencv/opencv/blob/3.4/samples/python/tutorial_code/video/optical_flow/optical_flow_dense.py
+)
+
 text
 
 <img src="repo_images/cv.png" width="600" >
@@ -109,7 +112,9 @@ text
 
 ## Acknowledgemnets
 
-(repos where we got most of our code)
+[ClementPinard/FlowNetPytorch](https://github.com/ClementPinard/FlowNetPytorch)
+
+[junyanz/pytorch-CycleGAN-and-pix2pix](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
 
 
 
